@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.TeleOp;
+package org.firstinspires.ftc.teamcode.Hardware;
 
 
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -73,10 +73,11 @@ public class Drivetrain{
                 case AIMING: //calculations are run in PID/LL classes?
                     //TODO: where are calculations run?
                     /*
-                    BR.setPower(power);
-                    BL.setPower(power);
-                    FR.setPower(power);
-                    FL.setPower(power);
+                    rotationPower = aimingPID(aiming.getError());
+                    BR.setPower(rotationPower);
+                    BL.setPower(-rotationPower);
+                    FR.setPower(rotationPower);
+                    FL.setPower(-rotationPower);
                     */
                     break;
                     }
