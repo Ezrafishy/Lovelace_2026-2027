@@ -1,8 +1,11 @@
 package org.firstinspires.ftc.teamcode.TeleOp;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.Gamepad;
+
+import org.firstinspires.ftc.teamcode.Hardware.Drivetrain;
+import org.firstinspires.ftc.teamcode.Hardware.Intake;
 
 @TeleOp
 public class teleop extends LinearOpMode {
@@ -16,13 +19,11 @@ public class teleop extends LinearOpMode {
     }
 
     private OpState state = OpState.IDLE;
-
     //creating subsystem variables that we can control (just like the motors in the subsystems!)
     Drivetrain drivetrain;
     Intake intake;
+    Gamepad gamepad;
 
-    private boolean intakeOn = false;
-    private boolean clearing = false;
 
 
     //TELEOP MAIN LOOP
@@ -35,12 +36,23 @@ public class teleop extends LinearOpMode {
         waitForStart();
         while (opModeIsActive()) {
             //drivetrain movement
-            drivetrain.drive(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
+           drivetrain.drive(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
+
+            if (gamepad1.rightBumperWasPressed()){
+                if(state == OpState.INTAKING){
+                    state = OpState.IDLE;
+                }
+                else{
+                    state = OpState.INTAKING;
+                }
+            }
+
+
+
 
             //control mapping & toggle switches!
-            if (gamepad1.right_bumper && !intakeOn) {
+            if (gamepad1.right_bumper && state != OpState.INTAKING) {
                 state = OpState.INTAKING;
-                intakeOn = true;
             }
             if (gamepad1.right_bumper && intakeOn) {
                 state = OpState.IDLE;
