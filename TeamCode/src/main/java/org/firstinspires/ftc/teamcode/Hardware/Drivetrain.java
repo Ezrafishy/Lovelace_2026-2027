@@ -28,7 +28,7 @@ public class Drivetrain{
         AIMING,
     }
 
-    private driveState drivestate = driveState.MANUAL;
+    private driveState state;
 
     public Drivetrain(HardwareMap hardwareMap){
             //Mapping motor variables to configured motors
@@ -45,7 +45,10 @@ public class Drivetrain{
             FR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             BL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             FL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        }
+
+            state = driveState.MANUAL;
+
+    }
 
         //Drive method does the calculations for what power to set to the motors using joystick
         //input
@@ -62,7 +65,7 @@ public class Drivetrain{
         }
 
         public void update(){
-            switch (drivestate) {
+            switch (state) {
                 case MANUAL:
                     BR.setPower(Range.clip(-v4, -1D, 1D));
                     BL.setPower(Range.clip(-v3, -1D, 1D));
@@ -70,8 +73,7 @@ public class Drivetrain{
                     FL.setPower(Range.clip(-v1, -1D, 1D));
                     break;
 
-                case AIMING: //calculations are run in PID/LL classes?
-                    //TODO: where are calculations run?
+                case AIMING: //calculations are run in aiming class
                     /*
                     rotationPower = aimingPID(aiming.getError());
                     BR.setPower(rotationPower);

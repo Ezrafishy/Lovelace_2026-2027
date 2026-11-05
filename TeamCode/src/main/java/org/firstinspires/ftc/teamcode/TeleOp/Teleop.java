@@ -2,28 +2,30 @@ package org.firstinspires.ftc.teamcode.TeleOp;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.teamcode.Hardware.Drivetrain;
 import org.firstinspires.ftc.teamcode.Hardware.Intake;
 
 @TeleOp
-public class teleop extends LinearOpMode {
+public class Teleop extends LinearOpMode {
 
-    private enum OpState { //states our opmode can be in
+    private enum OpState { //states our opmode can be in using subsystems
         INTAKING,
         IDLE,
         CLEARING,
         FIRING,
-        AIMING
+    }
+    private enum OpDriveState{ //driving states our opmode can be in
+        AIMING,
+        MANUAL
     }
 
     private OpState state = OpState.IDLE;
+    private OpDriveState drivestate = OpDriveState.MANUAL;
+
     //creating subsystem variables that we can control (just like the motors in the subsystems!)
     Drivetrain drivetrain;
     Intake intake;
-    Gamepad gamepad;
-
 
 
     //TELEOP MAIN LOOP
@@ -34,11 +36,23 @@ public class teleop extends LinearOpMode {
         intake = new Intake(hardwareMap);
 
         waitForStart();
-        while (opModeIsActive()) {
+        while (opModeIsActive()) {//While the code is running...
+
             //drivetrain movement
            drivetrain.drive(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
 
-            if (gamepad1.rightBumperWasPressed()){
+           //TODO: ensure joysticks override aiming mechanism in testing
+           if(gamepad1.leftTriggerWasPressed()) {
+               if (drivestate == OpDriveState.MANUAL) {
+                   drivestate = OpDriveState.AIMING;
+               }
+               else{
+                   drivestate = OpDriveState.MANUAL;
+               }
+           }
+
+           //other subsystem controls
+           if (gamepad1.rightBumperWasPressed()){ //intake button
                 if(state == OpState.INTAKING){
                     state = OpState.IDLE;
                 }
@@ -47,38 +61,34 @@ public class teleop extends LinearOpMode {
                 }
             }
 
+            if (gamepad1.leftBumperWasPressed()){ //clearing button
+                if(state == OpState.CLEARING){
+                    state = OpState.IDLE;
+                }
+                else{
+                    state = OpState.CLEARING;
+                }
+            }
+
+            //TODO: rest of control mapping & toggles
 
 
 
-            //control mapping & toggle switches!
-            if (gamepad1.right_bumper && state != OpState.INTAKING) {
-                state = OpState.INTAKING;
-            }
-            if (gamepad1.right_bumper && intakeOn) {
-                state = OpState.IDLE;
-                intakeOn = false;
-            }
-            if (gamepad1.left_bumper && !clearing){
-                state = OpState.CLEARING;
-                clearing = true;
-            }
-            if (gamepad1.left_bumper && clearing){
-                state = OpState.IDLE;
-                clearing = false;
-            }
 
             switch(state){
                 case IDLE:
-                    intake.intakeIdle();
+                    intake.idle();
                     break;
 
                 case CLEARING:
-                    intake.intakeOut();
+                    intake.out();
                     break;
 
                 case INTAKING:
-                    intake.intakeIn();
+                    intake.in();
                     break;
+
+                    //TODO: Rest of state switching
             }
 
             telemetry.update();

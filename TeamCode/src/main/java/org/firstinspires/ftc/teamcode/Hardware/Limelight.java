@@ -5,7 +5,7 @@ import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-
+//TODO: THIS IS DEAD CODE FROM LAST YEAR. CAN USE AS REFERENCE BUT WILL REQUIRE RESTRUCTURING
 public class Limelight extends LinearOpMode {
 
     //defining variables
