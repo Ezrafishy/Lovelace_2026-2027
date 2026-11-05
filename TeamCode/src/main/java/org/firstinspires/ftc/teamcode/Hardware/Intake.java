@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.TeleOp;
+package org.firstinspires.ftc.teamcode.Hardware;
 
 //These are imports, they let us use certain commands
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -13,14 +13,16 @@ and maps it to controls) can access each of the subsystems and run them when nee
 public class Intake{
 
     private DcMotor intake; //defining our intake variable
+    //TODO: change name to state
     private enum IntakeState { //Our list of states Intake can be in
         IN,
         OUT,
         IDLE
     }
-    private IntakeState intakeState = IntakeState.IDLE; //creating a variable that allows us to switch
+     //creating a variable that allows us to switch
     // states, and also sets the state to IDLE, so it is always stopped when we start the code
 
+    private IntakeState intakeState;
 
     public Intake(HardwareMap hardwareMap) { //This is a constructor! This is where we tell the
         // code what exactly we are coding (in this case a DcMotor we've named and configured as
@@ -31,8 +33,10 @@ public class Intake{
 
        intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
        //intake.setDirection(DcMotorSimple.Direction.REVERSE); IF NEEDED
-   }
 
+        intakeState = IntakeState.IDLE;
+   }
+//TODO: change names to "in"
     public void intakeIn(){
         intakeState = IntakeState.IN;
     }
@@ -50,11 +54,12 @@ public class Intake{
                 break;
 
             case IN: // If state is IN
-                intake.setPower(1); //intake motor is on
+                intake.setPower(SystemValues.intakeSpeed); //intake motor is on
+                //TODO: determine intakeSpeed and clearing in testing
                 break;
 
             case OUT: // if state is OUT
-                intake.setPower(-1); //intake motor is on (backwards)
+                intake.setPower(SystemValues.outTakeSpeed); //intake motor is on (backwards)
                 break;
         }
     }
