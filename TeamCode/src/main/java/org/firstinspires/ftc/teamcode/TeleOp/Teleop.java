@@ -86,6 +86,7 @@ public class Teleop extends LinearOpMode {
 
                 case INTAKING:
                     intake.in();
+                    transfer.in();
                     break;
 
                     //TODO: Rest of state switching

@@ -23,7 +23,7 @@ public class Intake{
 
     private IntakeState state;
 
-    public Intake(HardwareMap hardwareMap) { //This is a constructor! This is where we tell the
+    public Intake(HardwareMap hardwareMap){ //This is a constructor! This is where we tell the
         // code what exactly we are coding (in this case a DcMotor we've named and configured as
         // "intake." Here we can also set specific motor settings such as reversing it. Passing
         // HardwareMap through it allows the intake to initalize it's own motors without needing
@@ -35,9 +35,7 @@ public class Intake{
    }
 
    //State setter methods
-    public void in(){
-        state = IntakeState.IN;
-    }
+    public void in(){state = IntakeState.IN;}
     public void out(){
         state =IntakeState.OUT;
     }
